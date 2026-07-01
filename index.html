@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>ポケモンスリープ 睡眠タイプ解析ツール</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div><h1>睡眠タイプ解析</h1><p>複数の仮説モデルで、実際の判定との一致率を検証します。</p></div>
+      <div class="top-actions"><button id="backupBtn" type="button">JSON保存</button><label class="file-button">JSON復元<input id="restoreInput" type="file" accept="application/json"></label></div>
+    </header>
+    <nav class="tabs"><button class="tab active" data-view="calendar">カレンダー</button><button class="tab" data-view="history">履歴</button><button class="tab" data-view="analysis">解析</button><button class="tab" data-view="neutral">とくちょうなし</button><button class="tab" data-view="stats">統計</button></nav>
+    <main>
+      <section id="calendarView" class="view active"><div class="panel"><div class="month-nav"><button id="prevMonth" type="button">‹</button><h2 id="monthLabel"></h2><button id="nextMonth" type="button">›</button></div><div class="weekday-row"><span>日</span><span>月</span><span>火</span><span>水</span><span>木</span><span>金</span><span>土</span></div><div id="calendarGrid" class="calendar-grid"></div></div></section>
+      <section id="historyView" class="view"><div class="section-head"><h2>履歴一覧</h2><input id="historySearch" type="search" placeholder="日付・メモで検索"></div><div id="historyList" class="list"></div></section>
+      <section id="analysisView" class="view"><div class="section-head"><h2>モデル一致率</h2><p id="analysisSummary"></p></div><div id="modelScoreGrid" class="score-grid"></div><div class="panel"><h3>睡眠ごとの予測比較</h3><div id="predictionTable" class="table-wrap"></div></div></section>
+      <section id="neutralView" class="view"><div class="section-head"><h2>とくちょうなし解析</h2><p>平均との差や分割睡眠など、候補条件を並べて観察します。</p></div><div id="neutralHypotheses" class="score-grid"></div><div class="panel"><h3>とくちょうなし発生日</h3><div id="neutralTable" class="table-wrap"></div></div></section>
+      <section id="statsView" class="view"><div class="section-head"><h2>統計</h2><p id="statsSummary"></p></div><div id="statsGrid" class="stats-grid"></div></section>
+    </main>
+  </div>
+  <dialog id="entryDialog"><form id="entryForm" method="dialog"><div class="dialog-head"><div><h2 id="entryDateLabel"></h2><p>1日最大2回まで入力できます。</p></div><button class="icon-button" value="cancel" type="submit">×</button></div><div class="split-control"><label><span>2回目</span><select id="secondMode"><option value="off">計測なし</option><option value="on">計測あり</option></select></label></div><div id="sleepForms" class="sleep-forms"></div><div class="dialog-actions"><button id="deleteDayBtn" type="button" class="danger">この日を削除</button><span></span><button value="cancel" type="submit">閉じる</button><button id="saveDayBtn" type="button" class="primary">保存</button></div></form></dialog>
+  <template id="sleepFormTemplate"><fieldset class="sleep-card"><legend></legend><div class="form-grid"><label><span>睡眠タイプ</span><select data-field="type"><option value="">未入力</option><option value="dozing">うとうと</option><option value="snoozing">すやすや</option><option value="slumbering">ぐっすり</option><option value="balanced">とくちょうなし</option></select></label><label><span>うとうと%</span><input data-field="dozing" type="number" min="0" max="100" step="1" inputmode="numeric"></label><label><span>すやすや%</span><input data-field="snoozing" type="number" min="0" max="100" step="1" inputmode="numeric"></label><label><span>ぐっすり%</span><input data-field="slumbering" type="number" min="0" max="100" step="1" inputmode="numeric"></label><label><span>睡眠時間</span><input data-field="duration" type="time" step="60"></label><label><span>睡眠スコア</span><input data-field="score" type="number" min="0" max="100" step="1" inputmode="numeric"></label><label><span>寝付くまで</span><select data-field="sleepLatency"><option value="">未入力</option></select></label><label><span>就寝時刻</span><input data-field="bedTime" type="time"></label><label><span>起床時刻</span><input data-field="wakeTime" type="time"></label></div><label class="memo-label"><span>メモ</span><textarea data-field="memo" rows="3" placeholder="分割睡眠、計測の違和感、イベントなど"></textarea></label></fieldset></template>
+  <script src="app.js"></script>
+</body>
+</html>
